@@ -2,13 +2,12 @@
 
 // Book.java
 public class Book {
-    public String id;
+    public String regno;
     public String name;
-    public String author;
+    public String writter;
     public String description;
     public float rating;
-    public String image;
-    public boolean favorite;
+    public boolean isFavorite;
 }
 
 // BookRepository.java
@@ -51,12 +50,12 @@ public class SaveFavorite {
 public class BookEntity {
     @PrimaryKey
     @NonNull
-    public String id;
+    public String regno;
     public String name;
-    public String author;
+    public String writter;
     public String description;
     public float rating;
-    public String image;
+    public boolean isFavorite;
 }
 
 // BookDao.java
@@ -116,13 +115,12 @@ public class BookRepoImpl implements BookRepository {
             List<Book> books = new ArrayList<>();
             for (BookEntity be : list) {
                 Book b = new Book();
-                b.id = be.id;
+                b.regno = be.regno;
                 b.name = be.name;
-                b.author = be.author;
+                b.writter = be.writter;
                 b.description = be.description;
                 b.rating = be.rating;
-                b.image = be.image;
-                b.favorite = true;
+                b.isFavorite = be.isFavorite;
                 books.add(b);
             }
             return books;
@@ -132,12 +130,79 @@ public class BookRepoImpl implements BookRepository {
     @Override
     public void addFavorite(Book book) {
         BookEntity be = new BookEntity();
-        be.id = book.id;
+        be.regno = book.regno;
         be.name = book.name;
-        be.author = book.author;
+        be.writter = book.writter;
         be.description = book.description;
         be.rating = book.rating;
-        be.image = book.image;
+        be.isFavorite = true;
         Executors.newSingleThreadExecutor().execute(() -> dao.insert(be));
+    }
+}
+
+// === PRESENTATION LAYER ===
+
+// BookListVM.java
+public class BookListVM extends ViewModel {
+    private final GetBooks useCase;
+    private final LiveData<List<Book>> books;
+
+    public BookListVM(GetBooks useCase) {
+        this.useCase = useCase;
+        this.books = useCase.run();
+    }
+
+    public LiveData<List<Book>> getBooks() {
+        return books;
+    }
+}
+
+// BookDetailVM.java
+public class BookDetailVM extends ViewModel {
+    private final SaveFavorite useCase;
+
+    public BookDetailVM(SaveFavorite useCase) {
+        this.useCase = useCase;
+    }
+
+    public void favorite(Book book) {
+        useCase.run(book);
+    }
+}
+
+// BookListActivity.java
+public class BookListActivity extends AppCompatActivity {
+    private BookListVM vm;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_list);
+
+        vm = new ViewModelProvider(this).get(BookListVM.class);
+        vm.getBooks().observe(this, list -> {
+            // bind list to UI
+        });
+    }
+}
+
+// BookDetailActivity.java
+public class BookDetailActivity extends AppCompatActivity {
+    private BookDetailVM vm;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_detail);
+
+        vm = new ViewModelProvider(this).get(BookDetailVM.class);
+        Book book = getIntent().getParcelableExtra("book");
+
+        // bind views to book
+
+        findViewById(R.id.favorite_btn).setOnClickListener(v -> {
+            vm.favorite(book);
+            Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+        });
     }
 }
