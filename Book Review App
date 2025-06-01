@@ -44,3 +44,100 @@ public class SaveFavorite {
     }
 }
 
+// === DATA LAYER ===
+
+// BookEntity.java
+@Entity(tableName = "favorites")
+public class BookEntity {
+    @PrimaryKey
+    @NonNull
+    public String id;
+    public String name;
+    public String author;
+    public String description;
+    public float rating;
+    public String image;
+}
+
+// BookDao.java
+@Dao
+public interface BookDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(BookEntity book);
+
+    @Query("SELECT * FROM favorites")
+    LiveData<List<BookEntity>> getFavorites();
+}
+
+// BookDatabase.java
+@Database(entities = {BookEntity.class}, version = 1)
+public abstract class BookDatabase extends RoomDatabase {
+    public abstract BookDao getDao();
+}
+
+// ApiService.java
+public interface ApiService {
+    @GET("books.json")
+    Call<List<Book>> fetchBooks();
+}
+
+// BookRepoImpl.java
+public class BookRepoImpl implements BookRepository {
+    private final BookDao dao;
+    private final ApiService service;
+
+    public BookRepoImpl(BookDao dao, ApiService service) {
+        this.dao = dao;
+        this.service = service;
+    }
+
+    @Override
+    public LiveData<List<Book>> getBooks() {
+        MutableLiveData<List<Book>> liveBooks = new MutableLiveData<>();
+        service.fetchBooks().enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if (response.isSuccessful()) {
+                    liveBooks.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                liveBooks.setValue(new ArrayList<>());
+            }
+        });
+        return liveBooks;
+    }
+
+    @Override
+    public LiveData<List<Book>> getFavorites() {
+        return Transformations.map(dao.getFavorites(), list -> {
+            List<Book> books = new ArrayList<>();
+            for (BookEntity be : list) {
+                Book b = new Book();
+                b.id = be.id;
+                b.name = be.name;
+                b.author = be.author;
+                b.description = be.description;
+                b.rating = be.rating;
+                b.image = be.image;
+                b.favorite = true;
+                books.add(b);
+            }
+            return books;
+        });
+    }
+
+    @Override
+    public void addFavorite(Book book) {
+        BookEntity be = new BookEntity();
+        be.id = book.id;
+        be.name = book.name;
+        be.author = book.author;
+        be.description = book.description;
+        be.rating = book.rating;
+        be.image = book.image;
+        Executors.newSingleThreadExecutor().execute(() -> dao.insert(be));
+    }
+}
