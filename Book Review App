@@ -1,0 +1,20 @@
+// === DOMAIN LAYER ===
+
+// Book.java
+public class Book {
+    public String id;
+    public String name;
+    public String author;
+    public String description;
+    public float rating;
+    public String image;
+    public boolean favorite;
+}
+
+// BookRepository.java
+public interface BookRepository {
+    LiveData<List<Book>> getBooks();
+    LiveData<List<Book>> getFavorites();
+    void addFavorite(Book book);
+}
+
