@@ -1,5 +1,5 @@
 class LRUCache {
-  public:
+  private:
     class node {
       public:
       int key_;
@@ -18,12 +18,6 @@ class LRUCache {
   int cap;
   unordered_map < int, node * > m;
 
-  LRUCache(int capacity) {
-    cap = capacity;
-    head -> next = tail;
-    tail -> prev = head;
-  }
-
   void addnode(node * newnode) {
     node * temp = head -> next;
     newnode -> next = temp;
@@ -37,6 +31,14 @@ class LRUCache {
     node * delnext = delnode -> next;
     delprev -> next = delnext;
     delnext -> prev = delprev;
+  }
+
+public:
+
+  LRUCache(int capacity) {
+    cap = capacity;
+    head -> next = tail;
+    tail -> prev = head;
   }
 
   int get(int key) {
