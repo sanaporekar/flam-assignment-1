@@ -1,3 +1,34 @@
+Q1. Design and implement a Least Recently Used (LRU) Cache. A cache has a fixed capacity, and when it exceeds that capacity, it must evict the least recently used item to make space for the new one.
+Implement the following operations:
+get(key): Return the value of the key if it exists in the cache, otherwise return -1.
+put(key, value): Update or insert the value. If the cache is full, remove the least recently used item before inserting.
+Function Signatures:
+class LRUCache {
+public:
+    LRUCache(int capacity);
+    int get(int key);
+    void put(int key, int value);
+};
+Constraints:
+1 <= capacity <= 3000
+0 <= key, value <= 10^4
+Maximum number of operations: 10^5
+All operations must be done in O(1) time complexity.
+Example:
+Input:
+LRUCache lru(2);  
+lru.put(1, 1);
+lru.put(2, 2);
+lru.get(1);       
+lru.put(3, 3);    
+lru.get(2);       
+lru.put(4, 4);    
+lru.get(1);       
+lru.get(3);       
+lru.get(4); 
+
+source code:
+
 class LRUCache {
   private:
     class node {
@@ -70,3 +101,17 @@ public:
     m[key] = head -> next;
   }
 };   
+
+
+
+//input:
+//LRUCache lru(2);
+//lru.put(1, 1);
+//lru.put(2, 2);
+//cout << lru.get(1) << endl; // returns 1
+//lru.put(3, 3);              // evicts key 2
+//cout << lru.get(2) << endl; // returns -1 (not found)
+//lru.put(4, 4);              // evicts key 1
+//cout << lru.get(1) << endl; // returns -1 (not found)
+//cout << lru.get(3) << endl; // returns 3
+//cout << lru.get(4) << endl; // returns 4
