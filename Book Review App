@@ -18,3 +18,29 @@ public interface BookRepository {
     void addFavorite(Book book);
 }
 
+// GetBooks.java
+public class GetBooks {
+    private final BookRepository repo;
+
+    public GetBooks(BookRepository repo) {
+        this.repo = repo;
+    }
+
+    public LiveData<List<Book>> run() {
+        return repo.getBooks();
+    }
+}
+
+// SaveFavorite.java
+public class SaveFavorite {
+    private final BookRepository repo;
+
+    public SaveFavorite(BookRepository repo) {
+        this.repo = repo;
+    }
+
+    public void run(Book book) {
+        repo.addFavorite(book);
+    }
+}
+
