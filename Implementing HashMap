@@ -1,0 +1,68 @@
+Q2. Problem Statement:
+You are required to implement a simplified version of a HashMap (also known as an unordered map or dictionary), without using built-in hash table libraries like unordered_map, map, dict, or similar.
+Design a data structure that supports the following operations in average-case O(1) time:
+put(key, value) → Insert or update the value by key.
+get(key) → Return the value associated with the key. If not found, return -1.
+remove(key) → Remove the key from the map.
+Function Signatures:
+class MyHashMap {
+public:
+    MyHashMap();
+    void put(int key, int value);
+    int get(int key);
+    void remove(int key);
+};
+Constraints:
+All keys and values are integers.
+0 <= key, value <= 10^6
+Keys are unique within the map.
+Maximum operations: 10^5\
+Do not use built-in hash maps or dictionaries.
+Example:
+Input:
+MyHashMap obj;
+obj.put(1, 10);
+obj.put(2, 20);
+obj.get(1);       
+obj.get(3);       
+obj.put(2, 30);   
+obj.get(2);       
+obj.remove(2);
+obj.get(2);     
+
+
+solution:
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class MyHashMap {
+    vector<int> mapArray;
+public:
+    MyHashMap() {
+        mapArray = vector<int>(1000001, -1);
+    }
+    void put(int key, int value) {
+        mapArray[key] = value;
+    }
+    int get(int key) {
+        return mapArray[key];
+    }
+    void remove(int key) {
+        mapArray[key] = -1;
+    }
+};
+
+int main() {
+    MyHashMap obj;
+    obj.put(1, 10);
+    obj.put(2, 20);
+    cout << obj.get(1) << endl;       // Output : 1
+    cout << obj.get(3) << endl;      // OUtput: -1 (not found)
+    obj.put(2, 30);
+    cout << obj.get(2) << endl;      // Output: 1 (updated value)
+    obj.remove(2);
+    cout << obj.get(2) << endl;       // Output: -1 (removed)
+    return 0;
+}
