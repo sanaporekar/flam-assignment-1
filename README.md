@@ -7,13 +7,13 @@ table of content :
 3. Book Review App (MVP)
 
 LRU CACHE :
-Implements an LRU (Least Recently Used) Cache with get(key) and put(key, value) in O(1) time complexity using a combination of hash map and doubly linked list.
-key components -
-Doubly Linked List: for tracking the order of usage
-HashMap : for O(1) access to the nodes
+1. Implements an LRU (Least Recently Used) Cache with get(key) and put(key, value) in O(1) time complexity using a combination of hash map and doubly linked list.
+2. key components -
+1. Doubly Linked List: for tracking the order of usage
+2. HashMap : for O(1) access to the nodes
 
 Implementing HashMap:
-Implements a simplified HashMap with constant-time average case operations for put, get, and remove without using STL hash maps.
+1.Implements a simplified HashMap with constant-time average case operations for put, get, and remove without using STL hash maps.
 key design -
 Uses an array of size 1000001 to simulate hash buckets.
 Direct addressing used since key range is known.
