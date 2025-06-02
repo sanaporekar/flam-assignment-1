@@ -12,55 +12,55 @@ LRU CACHE :
 1. Doubly Linked List: for tracking the order of usage
 2. HashMap : for O(1) access to the nodes
 
-Implementing HashMap:
-1.Implements a simplified HashMap with constant-time average case operations for put, get, and remove without using STL hash maps.
-key design -
-Uses an array of size 1000001 to simulate hash buckets.
-Direct addressing used since key range is known.
+Implementing HashMap :
+1. Implements a simplified HashMap with constant-time average case operations for put, get, and remove without using STL hash maps.
+2. key design -
+1. Uses an array of size 1000001 to simulate hash buckets.
+2. Direct addressing used since key range is known.
 
 Book Review App :
-Build a Book Review Android App (Java) using Clean Architecture (or MVVM). Supports online browsing and offline saving (favorites).
+1. Build a Book Review Android App (Java) using Clean Architecture (or MVVM). Supports online browsing and offline saving (favorites).
 
-Architecture:
-Domain Layer: Entities, UseCases, Repositories
-Data Layer: Room (SQLite) and Retrofit (Fake API)
-Presentation Layer: ViewModels and Activities
+ Architecture:
+1. Domain Layer: Entities, UseCases, Repositories
+2. Data Layer: Room (SQLite) and Retrofit (Fake API)
+3. Presentation Layer: ViewModels and Activities
 
-Technologies-
-Java (No Kotlin)
-Retrofit (API)
-Room (SQLite DB)
-LiveData (Reactive UI)
-No third-party image libraries
+ Technologies-
+1. Java (No Kotlin)
+2. Retrofit (API)
+3. Room (SQLite DB)
+4. LiveData (Reactive UI)
+5. No third-party image libraries
 
-Domain Layer
+ Domain Layer
 
-Book.java - Model
+1. Book.java - Model
 
-GetBooks.java - UseCase to fetch books
+2. GetBooks.java - UseCase to fetch books
 
-SaveFavorite.java - UseCase to save favorite
+3. SaveFavorite.java - UseCase to save favorite
 
-BookRepository - Interface
+4. BookRepository - Interface
 
-Data Layer
+ Data Layer
 
-BookEntity, BookDao, BookDatabase
+1. BookEntity, BookDao, BookDatabase
 
-ApiService - Retrofit interface
+2. ApiService - Retrofit interface
 
-BookRepoImpl - Implements Repository using DAO + API
+3. BookRepoImpl - Implements Repository using DAO + API
 
 Presentation Layer
 
-BookListVM.java, BookDetailVM.java - ViewModels
+1. BookListVM.java, BookDetailVM.java - ViewModels
 
-BookListActivity.java, BookDetailActivity.java - UI
+2. BookListActivity.java, BookDetailActivity.java - UI
 
 Sample Flow :
 
-Open BookList → API fetches books → UI updates via LiveData
+1. Open BookList → API fetches books → UI updates via LiveData
 
-Click on book → Navigate to Detail screen
+2. Click on book → Navigate to Detail screen
 
-Click favorite → Book saved in Room → Can view later offline
+3. Click favorite → Book saved in Room → Can view later offline
